@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package model;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+
+message Doc {
+    string category = 1;
+    string id = 2;
+    string name = 3;
+}
+
+message Empty {}
+
+service DatasourceRpc {
+    rpc GetList (Empty) returns (DatasourceList) {
+        option (google.api.http) = {
+            get: "/datastore/ml/datasources"
+        };
+    }
+}
+
+message Datasource {
+    string index = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    string id = 3;
+}
+
+message DatasourceList {
+    repeated Datasource datasource = 1;
+}
+
+service UserRpc {
+    rpc Get (UserKeys) returns (UserSettings) {
+        option (google.api.http) = {
+            get: "/datastore/users/{username}/profile/settings"
+        };
+    }
+}
+
+message UserKeys {
+    string username = 1;
+}
+
+message UserSettings {
+    string username = 1;
+    string email = 2;
+}
